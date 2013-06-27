@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25">
+<Class name="REST.HTML">
+<Description>
+*******************************************************
+использованы материалы с мероприятия
+some part of this source code getting from
+InterSystems Global Summit 2013 
+"Building Mobile Applications with RESTful Interfaces" 
+by Chris Carmichael and Oliver Caudron
+*******************************************************</Description>
+<Super>%Library.Base</Super>
+<TimeCreated>62999,59579.113075</TimeCreated>
+
+<Method name="GetCompanies">
+<ClassMethod>1</ClassMethod>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	/* НЕПОНЯТНО ПОЧЕМУ РАбОТАЕТ И ПОЧЕМУ НЕ РАбОТАЕТ*/
+	&html<<html><body><h1>Companies list</h1>>
+   set st=$$$OK
+  try{
+	  &html<<h1>GetCompanies func.entering <b>TRY</b> block</h1>>  
+	  set n=0
+  set rs=##class(%SQL.Statement).%ExecDirect(,"select * from Data.Company")
+  while rs.%Next(){
+	  set n = n+1
+	  &html<#(n)# <a href = "/rest/orders/#(rs.ID)#">#(rs.name)#</a><br>>}
+  } catch ex{
+	  &html<<h1>entering <b>CATCH</b> block</h1>>  
+	  set st=ex.AsStatus()
+    }
+    &html<</body></html>>
+    quit st
+]]></Implementation>
+</Method>
+
+<Method name="GetOrders">
+<ClassMethod>1</ClassMethod>
+<FormalSpec>companyId:%String</FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	/* Всё ещё непонятно
+	 НЕПОНЯТНО ПОЧЕМУ РАбОТАЕТ И ПОЧЕМУ НЕ РАбОТАЕТ*/
+	&html<<html><body><h1>Companies list</h1>>
+   set st=$$$OK
+  try{
+	  &html<<h1>GetOrders func. entering <b>TRY</b> block</h1>>  
+	  set n=0
+	  set comp=##class(Data.Company).%OpenId(companyId) // определяем компанию по переданному ИД
+	  if comp=$$$NULLOREF {&html<<h1>НЭТУ ТАКОЙ КАНТОРЫ :( </h1>>   }
+	  else {
+		  &html<<h1>Заказы для компании <b>#(comp.Name)#</b></h1>>  
+		  for i=1:1:comp.Orders.Count(){ // по всем заказам выбранной компании
+			  set order=comp.Orders.GetAt(i) // взять i-й элемент заказа
+			  //строим таблицу заказов
+			  &html<<hr><h2>Дата заказа <b>#($zd(order.Date))#</b> Всего: <b>#(order.Total)#</b></h1>
+			  <table BORDER = "1">
+			  <tr><th>Единица</th><th>Количество</th><th>Цена</th></tr>>
+			  &html<<hr>status <b>still working 0</b>>
+			  for j=1:1:order.lines.Count(){
+				  // &html<<hr>status <b>still working</b>>
+				  set line=order.lines.GetAt(j)
+				  &html<<tr><td>#(line.Item)#</td><td>#(line.Qty)#</td><td>#(line.Price)#</td></tr>>
+				  }
+			  &html<<table>>
+			  }
+		  }
+   } catch ex{
+	  &html<<h1>entering <b>CATCH</b> block</h1>>  
+	  set st=ex.AsStatus()
+    }
+    &html<</body></html>>
+    quit st
+]]></Implementation>
+</Method>
+</Class>
+</Export>

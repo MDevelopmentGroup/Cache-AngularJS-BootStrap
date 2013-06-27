@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25">
+<Class name="Data.OrderLine">
+<Description>
+*******************************************************
+использованы материалы с мероприятия
+some part of this source code getting from
+InterSystems Global Summit 2013 
+"Building Mobile Applications with RESTful Interfaces" 
+by Chris Carmichael and Oliver Caudron
+*******************************************************
+Заказы перечисленя</Description>
+<Super>%SerialObject,%Populate,%XML.Adaptor</Super>
+<TimeCreated>62999,59062.878408</TimeCreated>
+
+<Property name="Item">
+<Type>%String</Type>
+<Parameter name="POPSPEC" value="Product()"/>
+</Property>
+
+<Property name="Qty">
+<Type>%Integer</Type>
+</Property>
+
+<Property name="Price">
+<Type>%Currency</Type>
+</Property>
+
+<Storage name="Default">
+<Type>%Library.CacheSerialState</Type>
+<State>OrderLineState</State>
+<StreamLocation>^Data.OrderLineS</StreamLocation>
+<Data name="OrderLineState">
+<Value name="1">
+<Value>Item</Value>
+</Value>
+<Value name="2">
+<Value>Qty</Value>
+</Value>
+<Value name="3">
+<Value>Price</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+</Export>

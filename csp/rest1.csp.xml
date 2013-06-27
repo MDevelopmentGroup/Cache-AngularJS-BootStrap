@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25">
+<CSP name="rest1.CSP" application="/csp/user/" default="1"><![CDATA[
+<!-- 
+использованы материалы с мероприятия
+some part of this source code getting from
+InterSystems Global Summit 2013 
+"Building Mobile Applications with RESTful Interfaces" by Chris Carmichael and Oliver Caudron
+-->
+<!doctype html>
+<html ng-app>
+<head>
+	<title>REST Test by CTP</title>
+	<!-- Ангуляр на гугле
+	использую абсолютную ссылку т.к. предложенная невидит, почему не разбирался -->
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+	<script language ="javascript"> 
+	// отвечает за контроль над Ангуляром
+	function control ($scope,$http){
+	// после переустановки каше порт стал 57773, а не 57772 как во всех примерах
+	// получаем данные в формате json и засовываем их в $scope.companies
+	// опять же абсолютная ссылка что бы не разбираться
+		$scope.getCompanies=function(){ // зачем то "обернули" в функцию
+		$http.get("http://localhost:57773/rest/json/companies").success(function(data){
+			$scope.companies=data.children;}).error(function(data,status){
+			$scope.alertzone="["+status+"] Ошибка загрузки компаний :( ["+data+"]"; });
+			
+		    }
+	 //тк теперь это функция - вызываем её, т.к. при изменениях в БД необходимо повторно обновлять используемый набор данных
+		$scope.getCompanies();
+		alertzone=123123123;
+	 // добавляем обновление
+	    $scope.update = function (company){
+		    $http.put("http://localhost:57773/rest/json/company/"+company.ID,company)
+		    .success(function(data){$scope.alertzone="Обновили"+company.Name;}).error(function(data,status){ // поменял alert(....); на alertzone
+			$scope.alertzone="["+status+"] Ошибка обновления имени компании :( ["+data+"]"; });
+		    }    
+		    
+	// добавляем удаление
+	    $scope.delete = function (company){
+		    $http.delete("http://localhost:57773/rest/json/company/"+company.ID)
+		    .success(function(data){$scope.getCompanies();$scope.alertzone="Удалилося!!!";}).error(function(data,status){
+			$scope.alertzone="["+status+"] Ошибка удаления компании :( ["+data+"]"; });
+		    }    
+	// добавляем добавление :)
+	    $scope.create = function (company){
+		    // что б кашэ был в курсе что мы ему предлагаем
+		    company.class="Data.Company";
+		    $http.post("http://localhost:57773/rest/json/company",company)
+		    .success(function(data){$scope.getCompanies();$scope.alertzone="Добавили!!!"+company.Name;}).error(function(data,status){
+			$scope.alertzone="["+status+"] Ошибка добавления компании :( ["+data+"]"; });
+		    }    
+		};
+	
+	</script>
+</head>
+	<!-- Назначаем контроллером страницы созданную выше функцию-->
+<body ng-controller="control">
+<!-- Создаём повторяющиеся записи, почти всё равно что:
+for j=1:1:companies.lines.Count(){
+				  set company=companies.lines.GetAt(j)
+ русские наименования ангуляр не поддерживает :)
+кусок до прокачивания:
+ <h1 ng-repeat="company in companies">
+ИД - <b>{{company.ID}}</b> Наименование <b>{{company.Name}}</b>
+</h1>
+далее опять шаманство - лучше мануал поглядеть http://docs.angularjs.org/api/
+в левом поле вводите имена без дефисов т.е. ngrepeat
+setPristine - судя по переводу очистить форму, благо не virgin
+тут некоторое описание что бы было ясно что же вызывается 
+http://docs.angularjs.org/api/ng.directive:form.FormController
+в примере указано что dirty и pristine используются для деактивации кнопки "сохранить"
+-->
+<h1 ng-model="alertzone"><font color=red>{{alertzone}}</font></h1>
+<form name="compCreateForm" ng-model="company" ng-submit="create(company); company.Name='';">
+новая компания <input type="text" ng-model="company.Name"/>
+<input type="submit" value="Сохранить"/>
+</form>
+
+<div ng-repeat="company in companies">
+ <form name="myForm" ng-submit="update(company); myForm.$setPristine();">
+  <input type="text" ng-model="company.Name"/>
+  <input type="submit" value="Сохранить" ng-show="myForm.$dirty"/>
+  <input type="button" value="X" ng-click="delete(company);"/>
+ </form>
+</div>
+<br>
+ <h3 ng-repeat="company in companies">
+ИД - <b>{{company.ID}}</b> Наименование <b>{{company.Name}}</b>
+</h3>
+
+</body>
+</html>
+]]></CSP>
+</Export>

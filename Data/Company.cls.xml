@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25">
+<Class name="Data.Company">
+<Description>
+*******************************************************
+использованы материалы с мероприятия
+some part of this source code getting from
+InterSystems Global Summit 2013 
+"Building Mobile Applications with RESTful Interfaces" 
+by Chris Carmichael and Oliver Caudron
+*******************************************************
+Чисто название</Description>
+<Super>%Persistent,%Populate,%XML.Adaptor</Super>
+<TimeCreated>62999,58621.758357</TimeCreated>
+
+<Property name="Name">
+<Type>%String</Type>
+<Parameter name="POPSPEC" value="Company()"/>
+</Property>
+
+<UDLText name="T">
+<Content><![CDATA[
+// чем то заполняем
+
+]]></Content>
+</UDLText>
+
+<Property name="Orders">
+<Type>Data.Order</Type>
+<Cardinality>children</Cardinality>
+<Inverse>Company</Inverse>
+<Relationship>1</Relationship>
+</Property>
+
+<Storage name="Default">
+<Type>%Library.CacheStorage</Type>
+<DataLocation>^Data.CompanyD</DataLocation>
+<DefaultData>CompanyDefaultData</DefaultData>
+<IdLocation>^Data.CompanyD</IdLocation>
+<IndexLocation>^Data.CompanyI</IndexLocation>
+<StreamLocation>^Data.CompanyS</StreamLocation>
+<ExtentSize>10</ExtentSize>
+<Data name="CompanyDefaultData">
+<Value name="1">
+<Value>%%CLASSNAME</Value>
+</Value>
+<Value name="2">
+<Value>Name</Value>
+</Value>
+</Data>
+<Property name="%%CLASSNAME">
+<Selectivity>100.0000%</Selectivity>
+</Property>
+<Property name="Name">
+<Selectivity>10.0000%</Selectivity>
+</Property>
+<SQLMap name="IDKEY">
+<BlockCount>-4</BlockCount>
+</SQLMap>
+</Storage>
+</Class>
+</Export>

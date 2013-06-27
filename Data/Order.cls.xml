@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25">
+<Class name="Data.Order">
+<Description>
+*******************************************************
+использованы материалы с мероприятия
+some part of this source code getting from
+InterSystems Global Summit 2013 
+"Building Mobile Applications with RESTful Interfaces" 
+by Chris Carmichael and Oliver Caudron
+*******************************************************
+Видимо 
+Заказ</Description>
+<Super>%Persistent,%Populate,%XML.Adaptor</Super>
+<TimeCreated>62999,59063.159294</TimeCreated>
+
+<Property name="Date">
+<Type>%Time</Type>
+</Property>
+
+<Property name="Total">
+<Type>%Currency</Type>
+</Property>
+
+<Property name="lines">
+<Description>
+Видимо строки заказа</Description>
+<Type>Data.OrderLine</Type>
+<Collection>list</Collection>
+</Property>
+
+<Property name="Company">
+<Type>Data.Company</Type>
+<Cardinality>parent</Cardinality>
+<Inverse>Orders</Inverse>
+<Relationship>1</Relationship>
+</Property>
+
+<Storage name="Default">
+<Type>%Library.CacheStorage</Type>
+<DataLocation>^Data.OrderD</DataLocation>
+<DefaultData>OrderDefaultData</DefaultData>
+<IdLocation>^Data.OrderD</IdLocation>
+<IndexLocation>^Data.OrderI</IndexLocation>
+<StreamLocation>^Data.OrderS</StreamLocation>
+<ExtentSize>50</ExtentSize>
+<Data name="OrderDefaultData">
+<Value name="1">
+<Value>%%CLASSNAME</Value>
+</Value>
+<Value name="2">
+<Value>Date</Value>
+</Value>
+<Value name="3">
+<Value>Total</Value>
+</Value>
+<Value name="4">
+<Value>lines</Value>
+</Value>
+<Value name="5">
+<Value>Lines</Value>
+</Value>
+</Data>
+<Property name="%%CLASSNAME">
+<Selectivity>100.0000%</Selectivity>
+</Property>
+<Property name="Company">
+<Selectivity>10.0000%</Selectivity>
+</Property>
+<Property name="Date">
+<Selectivity>2.0000%</Selectivity>
+</Property>
+<Property name="Total">
+<Selectivity>2.0000%</Selectivity>
+</Property>
+<Property name="childsub">
+<Selectivity>2.0000%</Selectivity>
+</Property>
+<Property name="lines">
+<Selectivity>2.0408%</Selectivity>
+</Property>
+<SQLMap name="IDKEY">
+<BlockCount>-8</BlockCount>
+</SQLMap>
+</Storage>
+</Class>
+</Export>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25">
+<Class name="REST.Broker">
+<Description><![CDATA[
+*******************************************************
+использованы материалы с мероприятия
+some part of this source code getting from
+InterSystems Global Summit 2013 
+"Building Mobile Applications with RESTful Interfaces" 
+by Chris Carmichael and Oliver Caudron
+*******************************************************
+Пока я не знаю до конца что он делает
+После компиляции работает по адресу
+<a href = "http://localhost:57773/rest/test">http://localhost:57773/rest/test</a>]]></Description>
+<Super>%CSP.REST</Super>
+<TimeCreated>62999,56505.766013</TimeCreated>
+
+<UDLText name="T">
+<Content><![CDATA[
+/* видимо отрабатываем  URL test и вызываем метод test
+ точнее Это карта размещения типа слушателя Listen в Apache или скорее аналог urls.py в django */
+]]></Content>
+</UDLText>
+
+<XData name="UrlMap">
+<Data><![CDATA[
+<Routes>
+   <Route Url="/test" Method="GET" Call="REST.Broker:Test"/> 
+   <Route Url="/company" Method="GET" Call="REST.HTML:GetCompanies"/> 
+   <Route Url="/orders/:compid" Method="GET" Call="REST.HTML:GetOrders"/> 
+   <Route Url="/json/companies" Method="GET" Call="REST.JSON:GetAllCompanies"/> 
+   <Route Url="/json/company/:compid" Method="PUT" Call="REST.JSON:UpdateCompany"/> 
+   <Route Url="/json/company/:compid" Method="DELETE" Call="REST.JSON:DeleteCompany"/> 
+   <Route Url="/json/company" Method="POST" Call="REST.JSON:CreateCompany"/> 
+ </Routes>
+]]></Data>
+</XData>
+
+<UDLText name="T">
+<Content><![CDATA[
+/* класс ниже выводит в браузер следующее:
+ <html>
+ <head><style type="text/css"></style></head>
+ <body>
+ <h1>Работает?!</h1> << собственно только это мы и указали
+ </body>
+ </html> */
+]]></Content>
+</UDLText>
+
+<Method name="Test">
+<ClassMethod>1</ClassMethod>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	&html<<h1>Работает?!</h1>>
+	&html<<h1>Работает!!!</h1>>
+	quit $$$OK
+]]></Implementation>
+</Method>
+
+<UDLText name="T">
+<Content><![CDATA[
+// переназначим реакцию на отсутствующую страницу
+
+]]></Content>
+</UDLText>
+
+<Method name="Http404">
+<ClassMethod>1</ClassMethod>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	&html<<h1>Работает?!</h1>>
+	&html<<h1>А НЕФИГА не Работает!!! :P 404</h1>>
+	quit $$$OK
+]]></Implementation>
+</Method>
+</Class>
+</Export>

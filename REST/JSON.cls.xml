@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25">
+<Class name="REST.JSON">
+<Description>
+*******************************************************
+использованы материалы с мероприятия
+some part of this source code getting from
+InterSystems Global Summit 2013 
+"Building Mobile Applications with RESTful Interfaces" 
+by Chris Carmichael and Oliver Caudron
+*******************************************************
+JSON Test class</Description>
+<Super>%Base</Super>
+<TimeCreated>63000,44444.255278</TimeCreated>
+
+<Method name="GetAllCompanies">
+<Description>
+готовим ответ в формате JSON для последующего использования </Description>
+<ClassMethod>1</ClassMethod>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+   
+   set st=$$$OK
+   try{
+
+	   do ##class(%ZEN.Auxiliary.jsonSQLProvider).%WriteJSONFromSQL(,"select *from Data.Company")
+ 
+   } catch ex{
+	  &html<<h1>entering <b>CATCH</b> block</h1>>  
+	  set st=ex.AsStatus()
+    }
+    quit st
+]]></Implementation>
+</Method>
+
+<Method name="UpdateCompany">
+<ClassMethod>1</ClassMethod>
+<FormalSpec>compid:%String</FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+   set st=$$$OK
+   try{
+	   &html<<h1>UpdateCompany func. entering <b>TRY</b> block</h1>>  
+	   // выбросить при ошибке
+	   // здесь мой компилятор глюкануло - долго требовал правую закрывающую скобку ))
+	   $$$THROWONERROR(st,##class(%ZEN.Auxiliary.jsonProvider).%ConvertJSONToObject(%request.Content,,.obj,1))
+	   // пытаемся сделать обратное преобразование - из формата json в объект
+ /* дёрнул из мануала Cahe
+ %ConvertJSONToObject(pContent As %String, 
+ pTargetClass As %String = "", 
+ Output pObject As %RegisteredObject, 
+ pIgnoreUnknownProps As %Boolean = 0) as %Status
+Utility method to allow direct use of JSON from a non-ZEN context (such as a CSP page).
+pContent is a string or a stream containing JSON notation.
+pTargetClass is an optional class type for the resulting object; if not provided, %ZEN.proxyObject is used.
+pObject is the object created from the the JSON. pIgnoreUnknownProps controls whether properties that are not defined in the object structure will be ignored or treated as an error condition. The default behaviour is to stop processing the incoming JSON.
+ */	   												   
+       set comp=##class(Data.Company).%OpenId(compid)
+       //не знаю что за хитрая инструкция... видимо выбросить если не попрёт
+       throw:comp=$$$NULLOREF ##class(%Exception.StatusException).CreateFromStatus($$$ERROR(5001,"Нэ нашёль компанию :("))
+       //здесь происходит главное таинство (после 2-х малопонятных инструкций)
+       set comp.Name=obj.Name
+       &html<<h1>Name <b>#(obj.Name)#</b></h1>>  
+       &html<<h1>ID <b>#(compid)#</b></h1>>  
+       // кажется мы попытались обновить поле Name &!?
+       $$$THROWONERROR(st,comp.%Save())
+ 
+   } catch ex{
+	  &html<<h1>entering <b>CATCH</b> block</h1>>  
+	  set st=ex.AsStatus()
+    }
+    quit st
+]]></Implementation>
+</Method>
+
+<Method name="DeleteCompany">
+<Description>
+в описании сказано - удаление/добавление делается одной строчкой, однако необходимо обрабатывать возможные ошибки
+Удалить компанию из БД</Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>compid:%String</FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+   set st=$$$OK
+   try{
+	   $$$THROWONERROR(st,##class(Data.Company).%DeleteId(compid))
+   } catch ex{
+	  set st=ex.AsStatus()
+    }
+    quit st
+]]></Implementation>
+</Method>
+
+<Method name="CreateCompany">
+<Description>
+Добавить компанию в БД</Description>
+<ClassMethod>1</ClassMethod>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+   set st=$$$OK
+   try{
+	   //опять же преобраразуем переданный JSON в объект
+	   $$$THROWONERROR(st,##class(%ZEN.Auxiliary.jsonProvider).%ConvertJSONToObject(%request.Content,,.obj,1))
+	   $$$THROWONERROR(st,obj.%Save())
+   } catch ex{
+	  set st=ex.AsStatus()
+    }
+    quit st
+]]></Implementation>
+</Method>
+</Class>
+</Export>
