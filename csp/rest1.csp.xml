@@ -45,7 +45,7 @@ InterSystems Global Summit 2013
 	// добавляем добавление :)
 	    $scope.create = function (company){
 		    // что б кашэ был в курсе что мы ему предлагаем
-		    company.class="Data.Company";
+		    // company. class="Data.Company";
 		    $http.post("http://localhost:57773/rest/json/company",company)
 		    .success(function(data){$scope.getCompanies();$scope.alertzone="Добавили!!!"+company.Name;}).error(function(data,status){
 			$scope.alertzone="["+status+"] Ошибка добавления компании :( ["+data+"]"; });

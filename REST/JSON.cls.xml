@@ -97,10 +97,17 @@ pObject is the object created from the the JSON. pIgnoreUnknownProps controls wh
 <ClassMethod>1</ClassMethod>
 <ReturnType>%Status</ReturnType>
 <Implementation><![CDATA[
+  #dim stream as %BinaryStream  
    set st=$$$OK
    try{
 	   //опять же преобраразуем переданный JSON в объект
-	   $$$THROWONERROR(st,##class(%ZEN.Auxiliary.jsonProvider).%ConvertJSONToObject(%request.Content,,.obj,1))
+	   
+	   $$$THROWONERROR(st,##class(%ZEN.Auxiliary.jsonProvider).%ConvertJSONToObject(%request.Content,"Data.Company",.obj,1))
+		/*
+		S ^AAA($J)=%request.Content	
+		s stream=%request.Content
+		s ^AAA($J,"stream")=stream
+		*/
 	   $$$THROWONERROR(st,obj.%Save())
    } catch ex{
 	  set st=ex.AsStatus()
