@@ -32,6 +32,9 @@ by Chris Carmichael and Oliver Caudron
    <Route Url="/json/company/:compid" Method="PUT" Call="REST.JSON:UpdateCompany"/> 
    <Route Url="/json/company/:compid" Method="DELETE" Call="REST.JSON:DeleteCompany"/> 
    <Route Url="/json/company" Method="POST" Call="REST.JSON:CreateCompany"/> 
+   <Route Url="/xml/company" Method="GET" Call="REST.XML:GetAllCompanies"/> 
+   <Route Url="/xml/company/:compid" Method="GET" Call="REST.XML:GetCompanies"/> 
+   
  </Routes>
 ]]></Data>
 </XData>

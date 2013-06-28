@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25">
+<Class name="REST.XML">
+<Description>
+Работа с XML
+</Description>
+<Super>%Base</Super>
+<TimeCreated>63001,60220.881278</TimeCreated>
+
+<Method name="GetAllCompanies">
+<ClassMethod>1</ClassMethod>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+		set st=$$$OK
+		try{
+			set xds=##class(%XML.DataSet).%New()
+			$$$THROWONERROR(st,xds.Prepare("select * from Data.Company"))
+			// формируем XML используя параметры по умолчанию
+			$$$THROWONERROR(st,xds.WriteXML(,,,,,1))
+			}
+		catch ex{
+			set st=ex.AsStatus()
+			}	
+		quit st
+]]></Implementation>
+</Method>
+
+<Method name="GetCompanies">
+<ClassMethod>1</ClassMethod>
+<FormalSpec>compid:%String</FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+		set st=$$$OK
+		try{
+			set comp=##class(Data.Company).%OpenId(compid)
+		throw:comp=$$$NULLOREF ##class(%Exception.StatusException).CreateFromStatus($$$ERROR(5001,"Компании не существует"))
+			// создаём новый XML
+			set writer=##class(%XML.Writer).%New()
+			// Задаём кодировку и отступ
+			set writer.Charset="UTF-8",writer.Indent=1
+			// вывести в текущее устройство вывода
+			$$$THROWONERROR(st,writer.OutputToDevice())
+			// формируем XML используя из объекта
+			$$$THROWONERROR(st,writer.RootObject(comp))
+			}
+		catch ex{
+			set st=ex.AsStatus()
+			}	
+		quit st
+]]></Implementation>
+</Method>
+</Class>
+</Export>
