@@ -10,7 +10,7 @@ InterSystems Global Summit 2013
 by Chris Carmichael and Oliver Caudron
 *******************************************************
 JSON Test class</Description>
-<Super>%Base</Super>
+<Super>%Base,%RegisteredObject</Super>
 <TimeCreated>63000,44444.255278</TimeCreated>
 
 <Method name="GetAllCompanies">
